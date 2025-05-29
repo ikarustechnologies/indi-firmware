@@ -1,4 +1,0 @@
-# Increase USBFS memory
-
-SUBSYSTEMS=="usb", ATTR{idVendor}=="1278", MODE="0666"
-SUBSYSTEMS=="usb", ATTR{idVendor}=="4444", MODE="0666"
