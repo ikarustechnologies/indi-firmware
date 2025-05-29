@@ -1,0 +1,3 @@
+
+# Apogee
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="125c", MODE="0666"
