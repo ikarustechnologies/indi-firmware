@@ -1,4 +1,4 @@
-# flatpak.sh
+# kstars.sh
 
 This script automates the installation of Kstars Flatpak package and the necessary INDI firmware and udev rules for various astronomical devices. It also installs the Flatpak if not exists.
 
