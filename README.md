@@ -32,7 +32,7 @@ For other Linux distributions, you will need to install Flatpak manually before 
 
 1.  **Download the script:**
     ```bash
-    wget https://raw.githubusercontent.com/ikarustechnologies/indi-firmware/kstars.sh
+    wget https://raw.githubusercontent.com/ikarustechnologies/indi-firmware/main/kstars.sh
     ```
 
 2.  **Make the script executable:**
