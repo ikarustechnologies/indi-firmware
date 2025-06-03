@@ -30,24 +30,15 @@ For other Linux distributions, you will need to install Flatpak manually before 
 
 ## Usage
 
-1.  **Download the script:**
-    ```bash
-    wget https://raw.githubusercontent.com/ikarustechnologies/indi-firmware/main/kstars.sh
-    ```
+Download the script and Run
 
-2.  **Make the script executable:**
-    ```bash
-    chmod +x flatpak.sh
-    ```
-
-3.  **Run the script:**
-    ```bash
-    ./flatpak.sh
-    ```
+```bash
+wget -qO- https://raw.githubusercontent.com/ikarustechnologies/indi-firmware/main/kstars.sh | sudo bash
+```
 
 The script will guide you through the installation process. You may be prompted for your password for `sudo` commands.
 
-## Manual Flatpak Installation (for unsupported distributions)
+## Manual Flatpak Installation (for unsupported distributions or macOS)
 
 If your operating system is not listed under "Supported Operating Systems for Automatic Flatpak Installation", you need to install Flatpak manually before running this script.
 
