@@ -108,9 +108,6 @@ echo "Reloading udev rules..."
 sudo udevadm control --reload-rules || { echo "Error reloading udev rules"; exit 1; }
 echo "Udev rules reloaded."
 
-# Return to the original directory
-cd - || { echo "Error: Could not return to original directory"; exit 1; }
-
 # Add Flathub remote if it doesn't exist
 echo "Adding Flathub remote if it doesn't exist..."
 sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo || { echo "Error adding Flathub remote"; exit 1; }
