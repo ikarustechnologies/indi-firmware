@@ -16,8 +16,6 @@ if ! command -v flatpak &> /dev/null; then
         case "$ID" in
             debian|ubuntu)
                 echo "Detected Debian/Ubuntu. Installing flatpak using apt..."
-                sudo add-apt-repository -y ppa:flatpak/stable || { echo "Error: add flatpak apt repository failed"; exit 1; }
-                sudo apt update || { echo "Error: apt update failed"; exit 1; }
                 sudo apt install -y flatpak || { echo "Error: apt install flatpak failed"; exit 1; }
                 ;;
             fedora)
