@@ -106,6 +106,11 @@ echo "Reloading udev rules..."
 sudo udevadm control --reload-rules || { echo "Error reloading udev rules"; exit 1; }
 echo "Udev rules reloaded."
 
+# Clean up the cloned repository directory
+echo "Cleaning up repository directory '$REPO_DIR'..."
+rm -rf "$REPO_DIR"
+echo "Cleanup complete."
+
 # Add Flathub remote if it doesn't exist
 echo "Adding Flathub remote if it doesn't exist..."
 sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo || { echo "Error adding Flathub remote"; exit 1; }
@@ -126,11 +131,6 @@ echo "KDE Platform and SDK runtimes installed."
 echo "Installing KStars Flatpak package..."
 sudo flatpak install smhub org.kde.kstars -y || { echo "Error installing KStars Flatpak"; exit 1; }
 echo "KStars Flatpak installed."
-
-# Clean up the cloned repository directory
-echo "Cleaning up repository directory '$REPO_DIR'..."
-rm -rf "$REPO_DIR"
-echo "Cleanup complete."
 
 echo "Script finished."
 echo " "
