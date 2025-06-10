@@ -118,7 +118,7 @@ echo "Flathub remote added."
 
 # Add StellarMate Hub remote with no GPG verification
 echo "Adding SM Hub remote if it doesn't exist (no GPG verification)..."
-sudo flatpak remote-add --if-not-exists smhub https://smhub.ikarustech.com --no-gpg-verify || { echo "Error adding StellarMate Hub remote"; exit 1; }
+sudo flatpak remote-add --if-not-exists smhub https://smhub.stellarmate.com/smhub.flatpakrepo || { echo "Error adding StellarMate Hub remote"; exit 1; }
 echo "SMHub remote added."
 
 # Install KDE Platform and SDK runtimes
