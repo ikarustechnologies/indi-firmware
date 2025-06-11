@@ -33,7 +33,8 @@ For other Linux distributions, you will need to install Flatpak manually before 
 Download the script and Run
 
 ```bash
-wget -qO- https://raw.githubusercontent.com/ikarustechnologies/indi-firmware/main/kstars.sh | sudo bash
+wget https://raw.githubusercontent.com/ikarustechnologies/indi-firmware/main/kstars.sh
+sudo bash kstars.sh
 ```
 
 The script will guide you through the installation process. You may be prompted for your password for `sudo` commands.
