@@ -39,7 +39,7 @@ sudo bash kstars.sh
 
 By default, it will install the `stable` version. To install a specific version, run:
 ```bash
-sudo bash kstars.sh 3.7.7
+sudo bash kstars.sh nightly
 ```
 
 The script will guide you through the installation process. You may be prompted for your password for `sudo` commands.
