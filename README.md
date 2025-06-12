@@ -30,11 +30,16 @@ For other Linux distributions, you will need to install Flatpak manually before 
 
 ## Usage
 
-Download the script and Run
+Download the script and run
 
 ```bash
 wget https://raw.githubusercontent.com/ikarustechnologies/indi-firmware/main/kstars.sh
 sudo bash kstars.sh
+```
+
+By default, it will install the `stable` version. To install a specific version, run:
+```bash
+sudo bash kstars.sh 3.7.7
 ```
 
 The script will guide you through the installation process. You may be prompted for your password for `sudo` commands.
