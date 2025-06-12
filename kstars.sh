@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Get KStars version from argument, default to stable if not provided
+KSTARS_VERSION=${1:-stable}
+
 # Define variables
 REPO_URL="https://github.com/ikarustechnologies/indi-firmware.git"
 REPO_DIR="indi-firmware"
@@ -16,6 +19,8 @@ if ! command -v flatpak &> /dev/null; then
         case "$ID" in
             debian|ubuntu)
                 echo "Detected Debian/Ubuntu. Installing flatpak using apt..."
+                sudo add-apt-repository -y ppa:flatpak/stable || { echo "Error: add flatpak apt repository failed"; exit 1; }
+                sudo apt update || { echo "Error: apt update failed"; exit 1; }
                 sudo apt install -y flatpak || { echo "Error: apt install flatpak failed"; exit 1; }
                 ;;
             fedora)
@@ -128,9 +133,10 @@ sudo flatpak install flathub org.kde.Sdk//5.15-24.08 -y || { echo "Error install
 echo "KDE Platform and SDK runtimes installed."
 
 # Install KStars Flatpak package from Flathub
-echo "Installing KStars Flatpak package..."
-sudo flatpak install smhub org.kde.kstars -y || { echo "Error installing KStars Flatpak"; exit 1; }
-echo "KStars Flatpak installed."
+echo "Installing KStars Flatpak package version ${KSTARS_VERSION}..."
+sudo flatpak install smhub org.kde.kstars//${KSTARS_VERSION} -y || { echo "Error installing KStars Flatpak ${KSTARS_VERSION}"; exit 1; }
+sudo flatpak update org.kde.kstars//${KSTARS_VERSION} -y || { echo "Error updating KStars Flatpak ${KSTARS_VERSION}"; exit 1; }
+echo "KStars Flatpak version ${KSTARS_VERSION} installed."
 
 echo "Script finished."
 echo " "
