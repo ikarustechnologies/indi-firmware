@@ -34,7 +34,7 @@ Download the script and Run
 
 ```bash
 wget https://raw.githubusercontent.com/ikarustechnologies/indi-firmware/main/kstars.sh
-sudo bash kstars.sh
+sudo bash kstars.sh master
 ```
 
 The script will guide you through the installation process. You may be prompted for your password for `sudo` commands.
