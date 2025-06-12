@@ -118,24 +118,24 @@ echo "Cleanup complete."
 
 # Add Flathub remote if it doesn't exist
 echo "Adding Flathub remote if it doesn't exist..."
-sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo || { echo "Error adding Flathub remote"; exit 1; }
+flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo || { echo "Error adding Flathub remote"; exit 1; }
 echo "Flathub remote added."
 
 # Add StellarMate Hub remote with no GPG verification
-echo "Adding SM Hub remote if it doesn't exist (no GPG verification)..."
-sudo flatpak remote-add --if-not-exists smhub https://smhub.stellarmate.com/smhub.flatpakrepo || { echo "Error adding StellarMate Hub remote"; exit 1; }
+echo "Adding SM Hub remote if it doesn't exist..."
+flatpak remote-add --user --if-not-exists smhub https://smhub.stellarmate.com/smhub.flatpakrepo || { echo "Error adding StellarMate Hub remote"; exit 1; }
 echo "SMHub remote added."
 
 # Install KDE Platform and SDK runtimes
 echo "Installing KDE Platform and SDK runtimes..."
-sudo flatpak install flathub org.kde.Platform//5.15-24.08 -y || { echo "Error installing KDE Platform runtime"; exit 1; }
-sudo flatpak install flathub org.kde.Sdk//5.15-24.08 -y || { echo "Error installing KDE SDK runtime"; exit 1; }
+flatpak install --user flathub org.kde.Platform//6.9 -y || { echo "Error installing KDE Platform runtime"; exit 1; }
+flatpak install --user flathub org.kde.Sdk//6.9 -y || { echo "Error installing KDE SDK runtime"; exit 1; }
 echo "KDE Platform and SDK runtimes installed."
 
 # Install KStars Flatpak package from Flathub
 echo "Installing KStars Flatpak package version ${KSTARS_VERSION}..."
-sudo flatpak install smhub org.kde.kstars//${KSTARS_VERSION} -y || { echo "Error installing KStars Flatpak ${KSTARS_VERSION}"; exit 1; }
-sudo flatpak update org.kde.kstars//${KSTARS_VERSION} -y || { echo "Error updating KStars Flatpak ${KSTARS_VERSION}"; exit 1; }
+flatpak install --user smhub org.kde.kstars//${KSTARS_VERSION} -y || { echo "Error installing KStars Flatpak ${KSTARS_VERSION}"; exit 1; }
+flatpak update --user org.kde.kstars//${KSTARS_VERSION} -y || { echo "Error updating KStars Flatpak ${KSTARS_VERSION}"; exit 1; }
 echo "KStars Flatpak version ${KSTARS_VERSION} installed."
 
 echo "Script finished."
@@ -144,11 +144,9 @@ echo "================================================================"
 echo "================================================================"
 echo " "
 echo " "
-
 echo "                   Installation completed "
 echo "                For running the Kstars, run: "
 echo "                 flatpak run org.kde.kstars "
-
 echo " "
 echo " "
 echo "================================================================"
