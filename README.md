@@ -44,7 +44,7 @@ sudo bash kstars.sh nightly
 
 The script will guide you through the installation process. You may be prompted for your password for `sudo` commands.
 
-## Manual Flatpak Installation (for unsupported distributions or macOS)
+## Manual Flatpak Installation (for unsupported distributions)
 
 If your operating system is not listed under "Supported Operating Systems for Automatic Flatpak Installation", you need to install Flatpak manually before running this script.
 
