@@ -5,7 +5,7 @@ KSTARS_VERSION=${1:-stable}
 
 # Define variables
 REPO_URL="https://github.com/ikarustechnologies/indi-firmware.git"
-REPO_DIR="indi-firmware"
+REPO_DIR="$HOME/.indi-firmware"
 UDEV_RULES_DIR="/lib/udev/rules.d"
 FIRMWARE_DIR="/lib/firmware"
 QHY_FIRMWARE_DIR="/lib/firmware/qhy"
@@ -56,7 +56,7 @@ if [ -d "$REPO_DIR" ]; then
 else
   echo "Cloning repository '$REPO_URL'..."
   # Use to potentially suppress GPG-related advice messages
-  git clone "$REPO_URL" || { echo "Error: Git clone failed"; exit 1; }
+  git clone "$REPO_URL" "$REPO_DIR" || { echo "Error: Git clone failed"; exit 1; }
 fi
 
 # Create destination directories if they don't exist
@@ -109,11 +109,6 @@ echo "Reloading udev rules..."
 sudo udevadm control --reload-rules || { echo "Error reloading udev rules"; exit 1; }
 echo "Udev rules reloaded."
 
-# Clean up the cloned repository directory
-echo "Cleaning up repository directory '$REPO_DIR'..."
-rm -rf "$REPO_DIR"
-echo "Cleanup complete."
-
 # Add Flathub remote if it doesn't exist
 echo "Adding Flathub remote if it doesn't exist..."
 flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo || { echo "Error adding Flathub remote"; exit 1; }
@@ -144,7 +139,7 @@ echo " "
 echo " "
 echo "                   Installation completed "
 echo "                For running the Kstars, run: "
-echo "                 flatpak run --user org.kde.kstars "
+echo "       flatpak run --user org.kde.kstars//${KSTARS_VERSION} "
 echo " "
 echo " "
 echo "================================================================"
