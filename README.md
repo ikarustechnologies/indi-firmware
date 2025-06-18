@@ -34,12 +34,12 @@ Download the script and run
 
 ```bash
 wget https://raw.githubusercontent.com/ikarustechnologies/indi-firmware/main/kstars.sh
-sudo bash kstars.sh
+bash kstars.sh
 ```
 
 By default, it will install the `stable` version. To install a specific version, run:
 ```bash
-sudo bash kstars.sh nightly
+bash kstars.sh nightly
 ```
 
 The script will guide you through the installation process. You may be prompted for your password for `sudo` commands.
