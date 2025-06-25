@@ -83,6 +83,29 @@ sudo cp -v "$REPO_DIR"/indi-3rdparty/libfishcamp/99-fishcamp.rules "$UDEV_RULES_
 sudo cp -v "$REPO_DIR"/indi-3rdparty/libfli/99-fli.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 99-fli.rules"; exit 1; }
 sudo cp -v "$REPO_DIR"/indi-3rdparty/indi-gphoto/85-disable-dslr-automout.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 85-disable-dslr-automout.rules"; exit 1; }
 sudo cp -v "$REPO_DIR"/indi-3rdparty/libqhy/85-qhyccd.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 85-qhyccd.rules"; exit 1; }
+sudo cp -v "$REPO_DIR"/indi-3rdparty/libasi/99-asi.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 99-asi.rules"; exit 1; }
+sudo cp -v "$REPO_DIR"/indi-3rdparty/libmeadecam/99-meadecam.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 99-meadecam.rules"; exit 1; }
+sudo cp -v "$REPO_DIR"/indi-3rdparty/indi-mgen/80-LacertaMgen.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 80-LacertaMgen.rules"; exit 1; }
+sudo cp -v "$REPO_DIR"/indi-3rdparty/indi-orion-ssg3/99-orionssg3.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 99-orionssg3.rules"; exit 1; }
+sudo cp -v "$REPO_DIR"/indi-3rdparty/libricohcamerasdk/99-pentax.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 99-pentax.rules"; exit 1; }
+sudo cp -v "$REPO_DIR"/indi-3rdparty/libtscam/99-tscam.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 99-tscam.rules"; exit 1; }
+sudo cp -v "$REPO_DIR"/indi-3rdparty/libatik/99-atik.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 99-atik.rules"; exit 1; }
+sudo cp -v "$REPO_DIR"/indi-3rdparty/libastroasis/99-astroasis.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 99-astroasis.rules"; exit 1; }
+sudo cp -v "$REPO_DIR"/indi-3rdparty/obsolete/indi-ssag/95-ssag.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 95-ssag.rules"; exit 1; }
+sudo cp -v "$REPO_DIR"/indi-3rdparty/libmallincam/99-mallincam.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 99-mallincam.rules"; exit 1; }
+sudo cp -v "$REPO_DIR"/indi-3rdparty/libstarshootg/99-starshootg.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 99-starshootg.rules"; exit 1; }
+sudo cp -v "$REPO_DIR"/indi-3rdparty/libinovasdk/99-inovaplx.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 99-inovaplx.rules"; exit 1; }
+sudo cp -v "$REPO_DIR"/indi-3rdparty/libsbig/51-sbig-debian.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 51-sbig-debian.rules"; exit 1; }
+sudo cp -v "$REPO_DIR"/indi-3rdparty/libomegonprocam/99-omegonprocam.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 99-omegonprocam.rules"; exit 1; }
+sudo cp -v "$REPO_DIR"/indi-3rdparty/libsvbonycam/99-svbonycam.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 99-svbonycam.rules"; exit 1; }
+sudo cp -v "$REPO_DIR"/indi-3rdparty/libaltaircam/99-altaircam.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 99-altaircam.rules"; exit 1; }
+sudo cp -v "$REPO_DIR"/indi-3rdparty/libmicam/99-miccd.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 99-miccd.rules"; exit 1; }
+sudo cp -v "$REPO_DIR"/indi-3rdparty/libtoupcam/99-toupcam.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 99-toupcam.rules"; exit 1; }
+sudo cp -v "$REPO_DIR"/indi-3rdparty/libnncam/99-nncam.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 99-nncam.rules"; exit 1; }
+sudo cp -v "$REPO_DIR"/indi-3rdparty/libbressercam/99-bressercam.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 99-bressercam.rules"; exit 1; }
+sudo cp -v "$REPO_DIR"/indi-3rdparty/libsvbony/90-svbonyusb.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 90-svbonyusb.rules"; exit 1; }
+sudo cp -v "$REPO_DIR"/indi-3rdparty/libplayerone/99-player_one_astronomy.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 99-player_one_astronomy.rules"; exit 1; }
+sudo cp -v "$REPO_DIR"/indi-3rdparty/libogmacam/99-ogmacam.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 99-ogmacam.rules"; exit 1; }
 echo "Udev rules files copied."
 
 # Copy individual firmware files
