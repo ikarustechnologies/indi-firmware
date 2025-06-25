@@ -91,7 +91,7 @@ sudo cp -v "$REPO_DIR"/indi-3rdparty/libricohcamerasdk/99-pentax.rules "$UDEV_RU
 sudo cp -v "$REPO_DIR"/indi-3rdparty/libtscam/99-tscam.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 99-tscam.rules"; exit 1; }
 sudo cp -v "$REPO_DIR"/indi-3rdparty/libatik/99-atik.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 99-atik.rules"; exit 1; }
 sudo cp -v "$REPO_DIR"/indi-3rdparty/libastroasis/99-astroasis.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 99-astroasis.rules"; exit 1; }
-sudo cp -v "$REPO_DIR"/indi-3rdparty/obsolete/indi-ssag/95-ssag.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 95-ssag.rules"; exit 1; }
+sudo cp -v "$REPO_DIR"/indi-3rdparty/obsolete/95-ssag.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 95-ssag.rules"; exit 1; }
 sudo cp -v "$REPO_DIR"/indi-3rdparty/libmallincam/99-mallincam.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 99-mallincam.rules"; exit 1; }
 sudo cp -v "$REPO_DIR"/indi-3rdparty/libstarshootg/99-starshootg.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 99-starshootg.rules"; exit 1; }
 sudo cp -v "$REPO_DIR"/indi-3rdparty/libinovasdk/99-inovaplx.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 99-inovaplx.rules"; exit 1; }
