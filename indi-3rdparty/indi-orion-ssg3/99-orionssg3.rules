@@ -1,0 +1,2 @@
+# All Orion Cameras
+SUBSYSTEMS=="usb", ATTR{idVendor}=="07ee", MODE="0666"

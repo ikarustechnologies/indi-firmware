@@ -1,0 +1,2 @@
+# All Pentax SDK Supported Cameras
+SUBSYSTEMS=="usb", ATTR{idVendor}=="25fb", MODE="0666" 
