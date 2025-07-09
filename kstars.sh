@@ -154,6 +154,7 @@ if [ "${KSTARS_VERSION}" = "stable" ]; then
     flatpak install --user org.kde.kstars -y || { echo "Error installing KStars Flatpak ${KSTARS_VERSION}"; exit 1; }
 elif [ "${KSTARS_VERSION}" = "nightly" ]; then
     flatpak install --user kstars-nightly org.kde.kstars -y || { echo "Error installing KStars Flatpak ${KSTARS_VERSION}"; exit 1; }
+fi
 flatpak update --user org.kde.kstars//${KSTARS_VERSION} -y || { echo "Error updating KStars Flatpak ${KSTARS_VERSION}"; exit 1; }
 echo "KStars Flatpak version ${KSTARS_VERSION} installed."
 
