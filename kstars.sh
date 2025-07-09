@@ -138,9 +138,9 @@ flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flath
 echo "Flathub remote added."
 
 # Add StellarMate Hub remote with no GPG verification
-echo "Adding SM Hub remote if it doesn't exist..."
-flatpak remote-add --user --if-not-exists smhub https://smhub.stellarmate.com/smhub.flatpakrepo || { echo "Error adding StellarMate Hub remote"; exit 1; }
-echo "SMHub remote added."
+echo "Adding kstars-nightly hub remote if it doesn't exist..."
+flatpak remote-add --user --if-not-exists kstars-nightly https://origin.cdn.kde.org/flatpak/kstars-nightly/kstars-nightly.flatpakrepo || { echo "Error adding kstars-nightly remote"; exit 1; }
+echo "kstars-nightly remote added."
 
 # Install KDE Platform and SDK runtimes
 echo "Installing KDE Platform and SDK runtimes..."
@@ -148,9 +148,12 @@ flatpak install --user flathub org.kde.Platform//6.9 -y || { echo "Error install
 flatpak install --user flathub org.kde.Sdk//6.9 -y || { echo "Error installing KDE SDK runtime"; exit 1; }
 echo "KDE Platform and SDK runtimes installed."
 
-# Install KStars Flatpak package from Flathub
+# Install KStars Flatpak package
 echo "Installing KStars Flatpak package version ${KSTARS_VERSION}..."
-flatpak install --user smhub org.kde.kstars//${KSTARS_VERSION} -y || { echo "Error installing KStars Flatpak ${KSTARS_VERSION}"; exit 1; }
+if [ "${KSTARS_VERSION}" = "stable" ]; then
+    flatpak install --user org.kde.kstars -y || { echo "Error installing KStars Flatpak ${KSTARS_VERSION}"; exit 1; }
+elif [ "${KSTARS_VERSION}" = "nightly" ]; then
+    flatpak install --user kstars-nightly org.kde.kstars -y || { echo "Error installing KStars Flatpak ${KSTARS_VERSION}"; exit 1; }
 flatpak update --user org.kde.kstars//${KSTARS_VERSION} -y || { echo "Error updating KStars Flatpak ${KSTARS_VERSION}"; exit 1; }
 echo "KStars Flatpak version ${KSTARS_VERSION} installed."
 
