@@ -151,7 +151,7 @@ echo "KDE Platform and SDK runtimes installed."
 # Install KStars Flatpak package
 echo "Installing KStars Flatpak package version ${KSTARS_VERSION}..."
 if [ "${KSTARS_VERSION}" = "stable" ]; then
-    flatpak install --user org.kde.kstars -y || { echo "Error installing KStars Flatpak ${KSTARS_VERSION}"; exit 1; }
+    flatpak install --user flathub org.kde.kstars -y || { echo "Error installing KStars Flatpak ${KSTARS_VERSION}"; exit 1; }
 elif [ "${KSTARS_VERSION}" = "nightly" ]; then
     flatpak install --user kstars-nightly org.kde.kstars -y || { echo "Error installing KStars Flatpak ${KSTARS_VERSION}"; exit 1; }
 fi
