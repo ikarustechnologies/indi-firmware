@@ -42,6 +42,8 @@ By default, it will install the `stable` version. To install a specific version,
 bash kstars.sh nightly
 ```
 
+The script will guide you through the installation process. You may be prompted for your password for `sudo` commands.
+
 ### Update
 
 The script above also updates the app in case you already have it. To manually update, use the command below:
@@ -49,8 +51,6 @@ The script above also updates the app in case you already have it. To manually u
 ```bash
 flatpak update org.kde.kstars
 ```
-
-The script will guide you through the installation process. You may be prompted for your password for `sudo` commands.
 
 ## Manual Flatpak Installation (for unsupported distributions)
 
