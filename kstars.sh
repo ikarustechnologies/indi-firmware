@@ -157,6 +157,7 @@ elif [ "${KSTARS_VERSION}" = "nightly" ]; then
 fi
 flatpak update --user org.kde.kstars -y || { echo "Error updating KStars Flatpak ${KSTARS_VERSION}"; exit 1; }
 flatpak override --user --filesystem=host org.kde.kstars
+flatpak override --user --talk-name=org.freedesktop.secrets org.kde.kstars
 echo "KStars Flatpak version ${KSTARS_VERSION} installed."
 
 echo "Script finished."
