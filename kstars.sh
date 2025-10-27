@@ -152,12 +152,11 @@ echo "KDE Platform and SDK runtimes installed."
 echo "Installing KStars Flatpak package version ${KSTARS_VERSION}..."
 if [ "${KSTARS_VERSION}" = "stable" ]; then
     flatpak install --user flathub org.kde.kstars//stable -y || { echo "Error installing KStars Flatpak ${KSTARS_VERSION}"; }
-    flatpak override --user --filesystem=host org.kde.kstars//stable
 elif [ "${KSTARS_VERSION}" = "nightly" ]; then
     flatpak install --user kstars-nightly org.kde.kstars//master -y || { echo "Error installing KStars Flatpak ${KSTARS_VERSION}"; }
-    flatpak override --user --filesystem=host org.kde.kstars//master
 fi
 flatpak update --user org.kde.kstars -y || { echo "Error updating KStars Flatpak ${KSTARS_VERSION}"; exit 1; }
+flatpak override --user --filesystem=host org.kde.kstars
 echo "KStars Flatpak version ${KSTARS_VERSION} installed."
 
 echo "Script finished."
