@@ -167,7 +167,11 @@ echo " "
 echo " "
 echo "                   Installation completed "
 echo "                For running the Kstars, run: "
-echo "       flatpak run --user org.kde.kstars//${KSTARS_VERSION} "
+if [ "${KSTARS_VERSION}" = "stable" ]; then
+    echo "       flatpak run --user org.kde.kstars//stable "
+elif [ "${KSTARS_VERSION}" = "nightly" ]; then
+    echo "       flatpak run --user org.kde.kstars//master "
+fi
 echo " "
 echo " "
 echo "================================================================"
