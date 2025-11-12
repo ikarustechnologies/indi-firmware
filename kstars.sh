@@ -9,40 +9,66 @@ REPO_DIR="$HOME/.indi-firmware"
 UDEV_RULES_DIR="/lib/udev/rules.d"
 FIRMWARE_DIR="/lib/firmware"
 QHY_FIRMWARE_DIR="/lib/firmware/qhy"
+FXLOAD_HELPER="/usr/local/sbin/indi-fxload"
+
+# Detect operating system information for package installation
+if [ -f /etc/os-release ]; then
+    . /etc/os-release
+else
+    echo "Error: Could not detect operating system information."
+    exit 1
+fi
 
 # Install flatpak if not already installed based on distribution
 echo "Checking for and installing flatpak..."
 
 if ! command -v flatpak &> /dev/null; then
-    if [ -f /etc/os-release ]; then
-        . /etc/os-release
-        case "$ID" in
-            debian|ubuntu)
-                echo "Detected Debian/Ubuntu. Installing flatpak using apt..."
-                sudo apt install -y flatpak || { echo "Error: apt install flatpak failed"; exit 1; }
-                ;;
-            fedora)
-                echo "Detected Fedora. Installing flatpak using dnf..."
-                sudo dnf install -y flatpak || { echo "Error: dnf install flatpak failed"; exit 1; }
-                ;;
-            arch)
-                echo "Detected Arch Linux. Installing flatpak using pacman..."
-                sudo pacman -Syu --noconfirm flatpak || { echo "Error: pacman install flatpak failed"; exit 1; }
-                ;;
-            *)
-                echo "Error: Unsupported distribution '$ID' for automatic Flatpak installation."
-                echo "Please install flatpak manually and rerun this script."
-                exit 1
-                ;;
-        esac
-        echo "Flatpak installed."
-    else
-        echo "Error: Could not detect operating system for automatic Flatpak installation."
-        echo "Please install flatpak manually and rerun this script."
-        exit 1
-    fi
+    case "$ID" in
+        debian|ubuntu)
+            echo "Detected Debian/Ubuntu. Installing flatpak using apt..."
+            sudo apt install -y flatpak || { echo "Error: apt install flatpak failed"; exit 1; }
+            ;;
+        fedora)
+            echo "Detected Fedora. Installing flatpak using dnf..."
+            sudo dnf install -y flatpak || { echo "Error: dnf install flatpak failed"; exit 1; }
+            ;;
+        arch)
+            echo "Detected Arch Linux. Installing flatpak using pacman..."
+            sudo pacman -Syu --noconfirm flatpak || { echo "Error: pacman install flatpak failed"; exit 1; }
+            ;;
+        *)
+            echo "Error: Unsupported distribution '$ID' for automatic Flatpak installation."
+            echo "Please install flatpak manually and rerun this script."
+            exit 1
+            ;;
+    esac
+    echo "Flatpak installed."
 else
     echo "Flatpak is already installed."
+fi
+
+echo "Checking for and installing fxload (required for QHYCCD firmware)..."
+if ! command -v fxload &> /dev/null && [ ! -x /sbin/fxload ]; then
+    case "$ID" in
+        debian|ubuntu)
+            echo "Detected Debian/Ubuntu. Installing fxload using apt..."
+            sudo apt install -y fxload || { echo "Error: apt install fxload failed"; exit 1; }
+            ;;
+        fedora)
+            echo "Detected Fedora. Installing fxload using dnf..."
+            sudo dnf install -y fxload || { echo "Error: dnf install fxload failed"; exit 1; }
+            ;;
+        arch)
+            echo "Detected Arch Linux. Installing fxload using pacman..."
+            sudo pacman -Syu --noconfirm fxload || { echo "Error: pacman install fxload failed"; exit 1; }
+            ;;
+        *)
+            echo "Warning: Unsupported distribution '$ID' for automatic fxload installation."
+            echo "Please install the 'fxload' package manually and rerun this script."
+            ;;
+    esac
+else
+    echo "fxload is already installed."
 fi
 
 
@@ -108,6 +134,10 @@ sudo cp -v "$REPO_DIR"/indi-3rdparty/libplayerone/99-player_one_astronomy.rules 
 sudo cp -v "$REPO_DIR"/indi-3rdparty/libogmacam/99-ogmacam.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 99-ogmacam.rules"; exit 1; }
 echo "Udev rules files copied."
 
+# Install fxload compatibility helper
+echo "Installing fxload helper script to $FXLOAD_HELPER..."
+sudo install -m 0755 "$REPO_DIR"/scripts/indi-fxload.sh "$FXLOAD_HELPER" || { echo "Error installing fxload helper script"; exit 1; }
+
 # Copy individual firmware files
 echo "Copying individual firmware files to $FIRMWARE_DIR..."
 
@@ -157,6 +187,7 @@ elif [ "${KSTARS_VERSION}" = "nightly" ]; then
 fi
 flatpak update --user org.kde.kstars -y || { echo "Error updating KStars Flatpak ${KSTARS_VERSION}"; exit 1; }
 flatpak override --user --filesystem=host org.kde.kstars
+flatpak override --user --device=all org.kde.kstars
 flatpak override --user --talk-name=org.freedesktop.secrets org.kde.kstars
 echo "KStars Flatpak version ${KSTARS_VERSION} installed."
 
