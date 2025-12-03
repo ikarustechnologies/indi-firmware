@@ -174,8 +174,8 @@ echo "kstars-nightly remote added."
 
 # Install KDE Platform and SDK runtimes
 echo "Installing KDE Platform and SDK runtimes..."
-flatpak install --user flathub org.kde.Platform//6.9 -y || { echo "Error installing KDE Platform runtime"; exit 1; }
-flatpak install --user flathub org.kde.Sdk//6.9 -y || { echo "Error installing KDE SDK runtime"; exit 1; }
+flatpak install --user flathub org.kde.Platform//6.10 -y || { echo "Error installing KDE Platform runtime"; exit 1; }
+flatpak install --user flathub org.kde.Sdk//6.10 -y || { echo "Error installing KDE SDK runtime"; exit 1; }
 echo "KDE Platform and SDK runtimes installed."
 
 # Install KStars Flatpak package
