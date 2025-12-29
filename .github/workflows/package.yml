@@ -48,7 +48,6 @@ jobs:
           arch=('any')
           url="https://github.com/ikarustechnologies/indi-firmware"
           license=('custom')
-          depends=('fxload')
           install=indi-firmware.install
           source=("git+https://github.com/ikarustechnologies/indi-firmware.git")
           sha256sums=('SKIP')
@@ -146,10 +145,9 @@ jobs:
       - name: Build Pacman package
         run: |
           if [[ "${{ matrix.architecture }}" == "aarch64" ]]; then
-            docker run --rm -v $(pwd):/workspace -w /workspace --platform linux/arm64 --user 0 \
+            docker run --rm -v $(pwd):/workspace -w /workspace --platform linux/arm64 \
             arch-build-arm64:latest bash -c "\
-            pacman -Sy --noconfirm fxload && \
-            su builder -c 'export PKGEXT=.pkg.tar.zst && makepkg --noconfirm --cleanbuild'"
+            export PKGEXT=.pkg.tar.zst && makepkg --noconfirm --cleanbuild"
             gpg --detach-sign --use-agent  --no-armor *.pkg.tar.zst
           else
             makepkg --noconfirm --cleanbuild --sign
