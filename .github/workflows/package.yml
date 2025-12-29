@@ -20,7 +20,7 @@ env:
 jobs:
   build:
     name: indi-firmware
-    runs-on: [sm-tester]
+    runs-on: [sm-tester, self-hosted]
     strategy:
       fail-fast: false
       matrix:
