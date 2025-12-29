@@ -67,10 +67,10 @@ if ! command -v fxload &> /dev/null && [ ! -x /sbin/fxload ]; then
             echo "Please install the 'fxload' package manually and rerun this script."
             ;;
     esac
+    echo "fxload installed."
 else
     echo "fxload is already installed."
 fi
-
 
 # Check if the repository directory exists. If it does, pull; otherwise, clone.
 if [ -d "$REPO_DIR" ]; then

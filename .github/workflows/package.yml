@@ -1,0 +1,173 @@
+name: Deploy indi-firmware Pacman
+
+on:
+  workflow_dispatch:
+    inputs:
+      env:
+        description: 'Environment for the build'
+        required: true
+        default: 'nightly'
+        type: choice
+        options:
+          - nightly
+          - stable
+  push:
+    branches: [main, nightly]
+
+env:
+  env: ${{ github.event_name == 'workflow_dispatch' && inputs.env || (github.ref_name == 'nightly' && 'nightly' || github.ref_name == 'main' && 'stable') }}
+
+jobs:
+  build:
+    name: indi-firmware
+    runs-on: [sm-tester]
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - architecture: aarch64
+          - architecture: x86_64
+
+    steps:
+      - name: clear the dir
+        run: |
+          sudo rm -rf *
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Create PKGBUILD
+        run: |
+          PACKAGE_VERSION=$(cat version)
+
+          cat << EOF > PKGBUILD
+          pkgname=indi-firmware
+          pkgver=$PACKAGE_VERSION
+          pkgrel=1
+          pkgdesc="Firmware files for INDI drivers"
+          arch=('any')
+          url="https://github.com/ikarustechnologies/indi-firmware"
+          license=('custom')
+          depends=('fxload')
+          install=indi-firmware.install
+          source=("git+https://github.com/ikarustechnologies/indi-firmware.git")
+          sha256sums=('SKIP')
+
+          package() {
+            cd "\$srcdir/indi-firmware"
+
+            # Define destination directories
+            local udev_dir="\$pkgdir/usr/lib/udev/rules.d"
+            local firmware_dir="\$pkgdir/usr/lib/firmware"
+            local qhy_firmware_dir="\$pkgdir/usr/lib/firmware/qhy"
+            local bin_dir="\$pkgdir/usr/bin"
+
+            # Create directories
+            install -d "\$udev_dir"
+            install -d "\$firmware_dir"
+            install -d "\$qhy_firmware_dir"
+            install -d "\$bin_dir"
+
+            # 1. Copy udev rules
+            install -m644 indi/drivers/auxiliary/99-indi_auxiliary.rules "\$udev_dir/"
+            install -m644 indi/drivers/video/80-dbk21-camera.rules "\$udev_dir/"
+            install -m644 indi-3rdparty/indi-ffmv/99-fireflymv.rules "\$udev_dir/"
+            install -m644 indi-3rdparty/indi-nightscape/99-nightscape.rules "\$udev_dir/"
+            install -m644 indi-3rdparty/indi-armadillo-platypus/99-armadilloplatypus.rules "\$udev_dir/"
+            install -m644 indi-3rdparty/libpktriggercord/src/pentax.rules "\$udev_dir/"
+            install -m644 indi-3rdparty/libpktriggercord/src/samsung.rules "\$udev_dir/"
+            install -m644 indi-3rdparty/indi-qsi/99-qsi.rules "\$udev_dir/"
+            install -m644 indi-3rdparty/indi-sx/99-sx.rules "\$udev_dir/"
+            install -m644 indi-3rdparty/libapogee/99-apogee.rules "\$udev_dir/"
+            install -m644 indi-3rdparty/indi-dsi/99-meadedsi.rules "\$udev_dir/"
+            install -m644 indi-3rdparty/libfishcamp/99-fishcamp.rules "\$udev_dir/"
+            install -m644 indi-3rdparty/libfli/99-fli.rules "\$udev_dir/"
+            install -m644 indi-3rdparty/indi-gphoto/85-disable-dslr-automout.rules "\$udev_dir/"
+            install -m644 indi-3rdparty/libqhy/85-qhyccd.rules "\$udev_dir/"
+            install -m644 indi-3rdparty/libasi/99-asi.rules "\$udev_dir/"
+            install -m644 indi-3rdparty/libmeadecam/99-meadecam.rules "\$udev_dir/"
+            install -m644 indi-3rdparty/indi-mgen/80-LacertaMgen.rules "\$udev_dir/"
+            install -m644 indi-3rdparty/indi-orion-ssg3/99-orionssg3.rules "\$udev_dir/"
+            install -m644 indi-3rdparty/libricohcamerasdk/99-pentax.rules "\$udev_dir/"
+            install -m644 indi-3rdparty/libtscam/99-tscam.rules "\$udev_dir/"
+            install -m644 indi-3rdparty/libatik/99-atik.rules "\$udev_dir/"
+            install -m644 indi-3rdparty/libastroasis/99-astroasis.rules "\$udev_dir/"
+            install -m644 indi-3rdparty/obsolete/95-ssag.rules "\$udev_dir/"
+            install -m644 indi-3rdparty/libmallincam/99-mallincam.rules "\$udev_dir/"
+            install -m644 indi-3rdparty/libstarshootg/99-starshootg.rules "\$udev_dir/"
+            install -m644 indi-3rdparty/libinovasdk/99-inovaplx.rules "\$udev_dir/"
+            install -m644 indi-3rdparty/libsbig/51-sbig-debian.rules "\$udev_dir/"
+            install -m644 indi-3rdparty/libomegonprocam/99-omegonprocam.rules "\$udev_dir/"
+            install -m644 indi-3rdparty/libsvbonycam/99-svbonycam.rules "\$udev_dir/"
+            install -m644 indi-3rdparty/libaltaircam/99-altaircam.rules "\$udev_dir/"
+            install -m644 indi-3rdparty/libmicam/99-miccd.rules "\$udev_dir/"
+            install -m644 indi-3rdparty/libtoupcam/99-toupcam.rules "\$udev_dir/"
+            install -m644 indi-3rdparty/libnncam/99-nncam.rules "\$udev_dir/"
+            install -m644 indi-3rdparty/libbressercam/99-bressercam.rules "\$udev_dir/"
+            install -m644 indi-3rdparty/libsvbony/90-svbonyusb.rules "\$udev_dir/"
+            install -m644 indi-3rdparty/libplayerone/99-player_one_astronomy.rules "\$udev_dir/"
+            install -m644 indi-3rdparty/libogmacam/99-ogmacam.rules "\$udev_dir/"
+
+            # 2. Install fxload helper
+            install -m755 scripts/indi-fxload.sh "\$bin_dir/indi-fxload"
+
+            # 3. Copy firmware files
+            install -m644 indi-3rdparty/libfishcamp/gdr_usb.hex "\$firmware_dir/"
+            install -m644 indi-3rdparty/libfishcamp/Guider_mono_rev16_intel.srec "\$firmware_dir/"
+            install -m644 indi-3rdparty/libsbig/sbigucam.hex "\$firmware_dir/"
+            install -m644 indi-3rdparty/libsbig/sbiglcam.hex "\$firmware_dir/"
+            install -m644 indi-3rdparty/libsbig/sbigfcam.hex "\$firmware_dir/"
+            install -m644 indi-3rdparty/libsbig/sbigpcam.hex "\$firmware_dir/"
+            install -m644 indi-3rdparty/libsbig/stfga.bin "\$firmware_dir/"
+            install -m644 indi-3rdparty/indi-dsi/meade-deepskyimager.hex "\$firmware_dir/"
+
+            # 4. Copy QHY firmware
+            install -m644 indi-3rdparty/libqhy/firmware/* "\$qhy_firmware_dir/"
+          }
+          EOF
+
+          cat << EOF > indi-firmware.install
+          post_install() {
+            echo "Reloading udev rules..."
+            udevadm control --reload-rules
+            udevadm trigger
+          }
+
+          post_upgrade() {
+            post_install
+          }
+
+          post_remove() {
+            echo "Reloading udev rules..."
+            udevadm control --reload-rules
+          }
+          EOF
+
+      - name: Build Pacman package
+        run: |
+          if [[ "${{ matrix.architecture }}" == "aarch64" ]]; then
+            docker run --rm -v $(pwd):/workspace -w /workspace --platform linux/arm64 \
+            arch-build-arm64:latest bash -c "\
+            pacman -Sy --noconfirm fxload && export PKGEXT=.pkg.tar.zst && makepkg --noconfirm --cleanbuild"
+            gpg --detach-sign --use-agent  --no-armor *.pkg.tar.zst
+          else
+            makepkg --noconfirm --cleanbuild --sign
+          fi
+          cp *.pkg.tar.zst *.pkg.tar.zst.sig /home/stellarmate/Projects/local-arch-repo/${{ env.env }}/${{ matrix.architecture }}
+
+      - name: Generate repo database
+        run: |
+          cd /home/stellarmate/Projects/local-arch-repo/${{ env.env }}/${{ matrix.architecture }}
+          rm smos.*
+          repo-add -s smos.db.tar.gz *.pkg.tar.zst
+
+      - name: Deploy package and repo to server
+        env:
+          SSH_KEY: ${{ secrets.DROPLET_PPA_SSH_KEY }}
+        run: |
+          eval "$(ssh-agent -s)"
+          ssh-add <(echo "$SSH_KEY")
+          
+          rsync -avz -e "ssh -p ${{ secrets.DROPLET_PPA_PORT }}" \
+            /home/stellarmate/Projects/local-arch-repo/${{ env.env }}/ \
+            ${{ secrets.DROPLET_PPA_USER }}@${{ secrets.DROPLET_PPA_HOST }}:/srv/www/repos/pacman/${{ env.env }}/
