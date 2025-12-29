@@ -146,9 +146,10 @@ jobs:
       - name: Build Pacman package
         run: |
           if [[ "${{ matrix.architecture }}" == "aarch64" ]]; then
-            docker run --rm -v $(pwd):/workspace -w /workspace --platform linux/arm64 \
+            docker run --rm -v $(pwd):/workspace -w /workspace --platform linux/arm64 --user 0 \
             arch-build-arm64:latest bash -c "\
-            pacman -Sy --noconfirm fxload && export PKGEXT=.pkg.tar.zst && makepkg --noconfirm --cleanbuild"
+            pacman -Sy --noconfirm fxload && \
+            su builder -c 'export PKGEXT=.pkg.tar.zst && makepkg --noconfirm --cleanbuild'"
             gpg --detach-sign --use-agent  --no-armor *.pkg.tar.zst
           else
             makepkg --noconfirm --cleanbuild --sign
