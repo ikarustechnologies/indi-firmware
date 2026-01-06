@@ -152,6 +152,7 @@ jobs:
           else
             makepkg --noconfirm --cleanbuild --sign
           fi
+          rm /home/stellarmate/Projects/local-arch-repo/${{ env.env }}/${{ matrix.architecture }}/indi-firmware-*
           cp *.pkg.tar.zst *.pkg.tar.zst.sig /home/stellarmate/Projects/local-arch-repo/${{ env.env }}/${{ matrix.architecture }}
 
       - name: Generate repo database
