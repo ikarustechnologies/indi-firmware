@@ -122,6 +122,10 @@ jobs:
 
             # 4. Copy QHY firmware
             install -m644 indi-3rdparty/libqhy/firmware/* "\$qhy_firmware_dir/"
+
+            sed -e 's|/lib/firmware|/usr/lib/firmware|' -i "\$udev_dir"/*.rules
+            sed -e 's|/usr/lib/firmware/qhy|/usr/lib/firmware|' -i "\$udev_dir"/85-qhyccd.rules
+            sed -e 's|-D \$env{DEVNAME}|-p \$env{BUSNUM},\$env{DEVNUM}|' -i "\$udev_dir"/85-qhyccd.rules
           }
           EOF
 
