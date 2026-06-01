@@ -32,6 +32,7 @@ jobs:
       - name: clear the dir
         run: |
           sudo rm -rf *
+          sudo rm -rf .*
 
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -67,6 +68,9 @@ jobs:
             install -d "\$firmware_dir"
             install -d "\$qhy_firmware_dir"
             install -d "\$bin_dir"
+
+            # 0. Run sed command to fix the 85-qhyccd to use /lib
+            sed -e 's|/lib/firmware|/usr/lib/firmware|' -i indi-3rdparty/libqhy/85-qhyccd.rules
 
             # 1. Copy udev rules
             install -m644 indi/drivers/auxiliary/99-indi_auxiliary.rules "\$udev_dir/"
