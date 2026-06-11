@@ -53,6 +53,8 @@ jobs:
           install=indi-firmware.install
           source=("git+https://github.com/ikarustechnologies/indi-firmware.git")
           sha256sums=('SKIP')
+          replaces=('indi-3rdparty-drivers' 'indi-3rdparty-libs')
+          conflicts=('indi-3rdparty-drivers' 'indi-3rdparty-libs')
 
           package() {
             cd "\$srcdir/indi-firmware"
