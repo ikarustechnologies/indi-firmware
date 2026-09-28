@@ -168,7 +168,7 @@ echo "Udev rules reloaded."
 refresh_remote_key() {
     local name="$1" repo_url="$2" key_file
     key_file=$(mktemp) || return 1
-    if curl -fsSL "$repo_url" | sed -n 's/^GPGKey=//p' | base64 -d > "$key_file" 2>/dev/null && [ -s "$key_file" ]; then
+    if curl -fsSL "$repo_url" | sed -n 's/^GPGKey[[:space:]]*=[[:space:]]*//p' | tr -d '[:space:]' | base64 -d > "$key_file" 2>/dev/null && [ -s "$key_file" ]; then
         flatpak remote-modify --user --gpg-import="$key_file" "$name" || echo "Warning: Could not update the signing key of the $name remote"
     else
         echo "Warning: Could not download the signing key of the $name remote"
