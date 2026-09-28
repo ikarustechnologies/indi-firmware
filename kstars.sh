@@ -162,15 +162,34 @@ echo "Reloading udev rules..."
 sudo udevadm control --reload-rules || { echo "Error reloading udev rules"; exit 1; }
 echo "Udev rules reloaded."
 
+# Import the current signing key of an existing remote.
+# --if-not-exists keeps an old remote as it is, including an old copy of its
+# key, and flatpak then fails with "Can't check signature: public key not found".
+refresh_remote_key() {
+    local name="$1" repo_url="$2" key_file
+    key_file=$(mktemp) || return 1
+    if curl -fsSL "$repo_url" | sed -n 's/^GPGKey=//p' | base64 -d > "$key_file" 2>/dev/null && [ -s "$key_file" ]; then
+        flatpak remote-modify --user --gpg-import="$key_file" "$name" || echo "Warning: Could not update the signing key of the $name remote"
+    else
+        echo "Warning: Could not download the signing key of the $name remote"
+    fi
+    rm -f "$key_file"
+}
+
+FLATHUB_REPO="https://flathub.org/repo/flathub.flatpakrepo"
+KSTARS_NIGHTLY_REPO="https://origin.cdn.kde.org/flatpak/kstars-nightly/kstars-nightly.flatpakrepo"
+
 # Add Flathub remote if it doesn't exist
 echo "Adding Flathub remote if it doesn't exist..."
-flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo || { echo "Error adding Flathub remote"; exit 1; }
-echo "Flathub remote added."
+flatpak remote-add --user --if-not-exists flathub "$FLATHUB_REPO" || { echo "Error adding Flathub remote"; exit 1; }
+refresh_remote_key flathub "$FLATHUB_REPO"
+echo "Flathub remote ready."
 
-# Add StellarMate Hub remote with no GPG verification
+# Add kstars-nightly remote if it doesn't exist
 echo "Adding kstars-nightly hub remote if it doesn't exist..."
-flatpak remote-add --user --if-not-exists kstars-nightly https://origin.cdn.kde.org/flatpak/kstars-nightly/kstars-nightly.flatpakrepo || { echo "Error adding kstars-nightly remote"; exit 1; }
-echo "kstars-nightly remote added."
+flatpak remote-add --user --if-not-exists kstars-nightly "$KSTARS_NIGHTLY_REPO" || { echo "Error adding kstars-nightly remote"; exit 1; }
+refresh_remote_key kstars-nightly "$KSTARS_NIGHTLY_REPO"
+echo "kstars-nightly remote ready."
 
 # Install KDE Platform and SDK runtimes
 echo "Installing KDE Platform and SDK runtimes..."
