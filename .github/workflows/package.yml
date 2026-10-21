@@ -142,6 +142,14 @@ jobs:
 
           cat << EOF > indi-firmware.install
           post_install() {
+            # 99-sbig.rules replaces 51-sbig-debian.rules, which calls fxload with the unsupported -D option.
+            # Remove a stray copy left by older installs, unless another package owns it.
+            local old_sbig_rules=/usr/lib/udev/rules.d/51-sbig-debian.rules
+            if [ -f "\$old_sbig_rules" ] && ! pacman -Qqo "\$old_sbig_rules" > /dev/null 2>&1; then
+              echo "Removing obsolete \$old_sbig_rules..."
+              rm -f "\$old_sbig_rules"
+            fi
+
             echo "Reloading udev rules..."
             udevadm control --reload-rules
             udevadm trigger
