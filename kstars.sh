@@ -121,7 +121,8 @@ sudo cp -v "$REPO_DIR"/indi-3rdparty/obsolete/95-ssag.rules "$UDEV_RULES_DIR"/ |
 sudo cp -v "$REPO_DIR"/indi-3rdparty/libmallincam/99-mallincam.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 99-mallincam.rules"; exit 1; }
 sudo cp -v "$REPO_DIR"/indi-3rdparty/libstarshootg/99-starshootg.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 99-starshootg.rules"; exit 1; }
 sudo cp -v "$REPO_DIR"/indi-3rdparty/libinovasdk/99-inovaplx.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 99-inovaplx.rules"; exit 1; }
-sudo cp -v "$REPO_DIR"/indi-3rdparty/libsbig/51-sbig-debian.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 51-sbig-debian.rules"; exit 1; }
+sudo rm -f "$UDEV_RULES_DIR"/51-sbig-debian.rules
+sudo cp -v "$REPO_DIR"/indi-3rdparty/libsbig/51-sbig-debian.rules "$UDEV_RULES_DIR"/99-sbig.rules || { echo "Error copying 99-sbig.rules"; exit 1; }
 sudo cp -v "$REPO_DIR"/indi-3rdparty/libomegonprocam/99-omegonprocam.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 99-omegonprocam.rules"; exit 1; }
 sudo cp -v "$REPO_DIR"/indi-3rdparty/libsvbonycam/99-svbonycam.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 99-svbonycam.rules"; exit 1; }
 sudo cp -v "$REPO_DIR"/indi-3rdparty/libaltaircam/99-altaircam.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 99-altaircam.rules"; exit 1; }
@@ -133,6 +134,30 @@ sudo cp -v "$REPO_DIR"/indi-3rdparty/libsvbony/90-svbonyusb.rules "$UDEV_RULES_D
 sudo cp -v "$REPO_DIR"/indi-3rdparty/libplayerone/99-player_one_astronomy.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 99-player_one_astronomy.rules"; exit 1; }
 sudo cp -v "$REPO_DIR"/indi-3rdparty/libogmacam/99-ogmacam.rules "$UDEV_RULES_DIR"/ || { echo "Error copying 99-ogmacam.rules"; exit 1; }
 echo "Udev rules files copied."
+
+# Fix the SBIG rules: give -t fx (the legacy fxload default, required by the libusb fxload)
+# and add the missing comma after ATTRS{serial} in the SBIG 4K rule
+sudo sed -e '/fxload/{/ -t /!s|/sbin/fxload |/sbin/fxload -t fx |}' -e 's|" *\\$|", \\|' -i "$UDEV_RULES_DIR"/99-sbig.rules || { echo "Error fixing 99-sbig.rules"; exit 1; }
+
+# Match the fxload syntax in the udev rules to the installed fxload.
+# The legacy fxload takes -D <devnode>, the libusb-based fxload takes -p <bus>,<addr>.
+FXLOAD_RULES="85-qhyccd.rules 99-sbig.rules 99-meadedsi.rules"
+FXLOAD_BIN=/sbin/fxload
+[ -x "$FXLOAD_BIN" ] || FXLOAD_BIN=$(command -v fxload)
+FXLOAD_USAGE=$("$FXLOAD_BIN" -h 2>&1)
+if grep -q -- '-p bus,addr' <<< "$FXLOAD_USAGE"; then
+    echo "Detected libusb fxload. Updating udev rules to use -p <bus>,<addr>..."
+    for rules in $FXLOAD_RULES; do
+        sudo sed -e 's|-D $env{DEVNAME}|-p $env{BUSNUM},$env{DEVNUM}|' -i "$UDEV_RULES_DIR/$rules" || { echo "Error updating $rules"; exit 1; }
+    done
+elif grep -q -- '-D devpath' <<< "$FXLOAD_USAGE"; then
+    echo "Detected legacy fxload. Updating udev rules to use -D <devnode>..."
+    for rules in $FXLOAD_RULES; do
+        sudo sed -e 's|-p $env{BUSNUM},$env{DEVNUM}|-D $env{DEVNAME}|' -i "$UDEV_RULES_DIR/$rules" || { echo "Error updating $rules"; exit 1; }
+    done
+else
+    echo "Warning: Could not detect the fxload version. Firmware loading udev rules are left unchanged."
+fi
 
 # Install fxload compatibility helper
 echo "Installing fxload helper script to $FXLOAD_HELPER..."
