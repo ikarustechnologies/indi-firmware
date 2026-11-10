@@ -5,16 +5,23 @@ INDI_REPO_URL="https://github.com/indilib/indi.git"
 INDI_3RDPARTY_REPO_URL="https://github.com/indilib/indi-3rdparty.git"
 FILES_REPO_URL="https://github.com/ikarustechnologies/indi-firmware.git"
 
+# indi and indi-3rdparty are only read from, so keep just the latest commit.
+# Fetch it, move to it, and drop the old one so the folder stays small.
+update_shallow() {
+    git fetch --depth 1 origin && git reset --hard "@{u}" &&
+    git reflog expire --expire=now --all && git gc --prune=now --quiet
+}
+
 # Check and clone/pull indi repository
 echo "Checking indi repository..."
 if [ -d "indi" ]; then
     echo "indi directory exists, pulling latest changes..."
     cd indi || { echo "Error: Could not navigate to indi directory"; exit 1; }
-    git pull
+    update_shallow
     cd ..
 else
     echo "indi directory not found, cloning repository..."
-    git clone "$INDI_REPO_URL" indi
+    git clone --depth 1 "$INDI_REPO_URL" indi
 fi
 
 # Check and clone/pull indi-3rdparty repository
@@ -22,11 +29,11 @@ echo "Checking indi-3rdparty repository..."
 if [ -d "indi-3rdparty" ]; then
     echo "indi-3rdparty directory exists, pulling latest changes..."
     cd indi-3rdparty || { echo "Error: Could not navigate to indi-3rdparty directory"; exit 1; }
-    git pull
+    update_shallow
     cd ..
 else
     echo "indi-3rdparty directory not found, cloning repository..."
-    git clone "$INDI_3RDPARTY_REPO_URL" indi-3rdparty
+    git clone --depth 1 "$INDI_3RDPARTY_REPO_URL" indi-3rdparty
 fi
 
 # Check and clone/pull indi-firmware repository
